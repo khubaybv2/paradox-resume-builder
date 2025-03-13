@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradox Resume Builder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/evidenceprime/html-docx-js/dist/html-docx.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #27ae60;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--light-gray);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+        }
+
+        .resume-builder-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .builder-header h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        .builder-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .input-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
+            padding-bottom: 5px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: var(--light-gray);
+            color: var(--text-color);
+        }
+
+        .add-more {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: opacity 0.3s;
+        }
+
+        .add-more:hover {
+            opacity: 0.9;
+        }
+
+        .preview-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .resume-preview {
+            min-height: 800px;
+            padding: 30px;
+            background: #ffffff;
+            width: 21cm;
+            min-height: 29.7cm;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .download-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .download-btn {
+            padding: 12px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .pdf-btn {
+            background: var(--accent-color);
+        }
+
+        .docx-btn {
+            background: #2980b9;
+        }
+
+        .credit-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        .credit-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .download-credit {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .builder-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .resume-preview {
+                width: 100%;
+                min-height: auto;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Preview Styles */
+        .preview-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .preview-header h1 {
+            color: var(--primary-color);
+            margin: 5px 0;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .preview-header p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        .personal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            color: var(--secondary-color);
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--light-gray);
+            padding-bottom: 5px;
+        }
+
+        .edu-item, .exp-item {
+            margin-bottom: 20px;
+        }
+
+        .edu-item h3, .exp-item h3 {
+            font-size: 1em;
+            font-weight: 600;
+            margin: 5px 0;
+            color: var(--primary-color);
+        }
+
+        .edu-item p, .exp-item p {
+            margin: 3px 0;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            background: var(--secondary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-builder-container">
+        <div class="builder-header">
+            <h1>Paradox Resume Builder</h1>
+        </div>
+        
+        <div class="builder-wrapper">
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="form-group">
+                    <h3>Personal Information</h3>
+                    <div class="input-row">
+                        <input type="text" id="fullName" placeholder="Full Name">
+                        <input type="email" id="email" placeholder="Email">
+                    </div>
+                    <div class="input-row">
+                        <input type="tel" id="phone" placeholder="Phone">
+                        <input type="text" id="address" placeholder="Address">
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="fatherName" placeholder="Father's Name">
+                        <input type="text" id="motherName" placeholder="Mother's Name">
+                    </div>
+                    <div class="input-row">
+                        <select id="religion">
+                            <option value="">Select Religion</option>
+                            <option>Islam</option>
+                            <option>Hinduism</option>
+                            <option>Christianity</option>
+                            <option>Buddhism</option>
+                            <option>Other</option>
+                        </select>
+                        <select id="maritalStatus">
+                            <option value="">Marital Status</option>
+                            <option>Single</option>
+                            <option>Married</option>
+                            <option>Divorced</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Education</h3>
+                    <div class="education-form">
+                        <div class="input-row">
+                            <input type="text" class="edu-input" placeholder="Degree">
+                            <input type="text" class="edu-input" placeholder="University">
+                        </div>
+                        <div class="input-row">
+                            <input type="text" class="edu-input" placeholder="Years (e.g., 2018-2022)">
+                            <input type="number" class="edu-input" placeholder="CGPA/GPA" step="0.01">
+                        </div>
+                    </div>
+                    <button class="add-more" onclick="addEducation()">Add More Education +</button>
+                </div>
+
+                <div class="form-group">
+                    <h3>Work Experience</h3>
+                    <div class="experience-form">
+                        <div class="input-row">
+                            <input type="text" class="exp-input" placeholder="Job Title">
+                            <input type="text" class="exp-input" placeholder="Company">
+                        </div>
+                        <textarea class="exp-input" placeholder="Job Description"></textarea>
+                    </div>
+                    <button class="add-more" onclick="addExperience()">Add More Experience +</button>
+                </div>
+
+                <div class="form-group">
+                    <h3>Skills</h3>
+                    <textarea id="skills" placeholder="Comma separated skills (e.g., HTML, CSS, JavaScript)"></textarea>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="preview-section">
+                <div class="resume-preview" id="resumePreview">
+                    <div class="preview-header">
+                        <h1 id="previewHeader">Resume of [Your Name]</h1>
+                        <div class="personal-details">
+                            <div>
+                                <p id="previewEmail">Email: email@example.com</p>
+                                <p id="previewPhone">Phone: (123) 456-7890</p>
+                            </div>
+                            <div>
+                                <p id="previewAddress">Address: City, Country</p>
+                                <p id="previewReligion">Religion: -</p>
+                            </div>
+                        </div>
+                        <p id="previewParents">Parents: Father's Name & Mother's Name</p>
+                        <p id="previewMarital">Marital Status: Single</p>
+                    </div>
+                    
+                    <section class="education-section">
+                        <div class="section-title">Education</div>
+                        <div id="previewEducation"></div>
+                    </section>
+                    
+                    <section class="experience-section">
+                        <div class="section-title">Experience</div>
+                        <div id="previewExperience"></div>
+                    </section>
+                    
+                    <section class="skills-section">
+                        <div class="section-title">Skills</div>
+                        <div id="previewSkills"></div>
+                    </section>
+                    
+                    <div class="download-credit">Powered by <a href="https://www.khubaybhossain.com">Khubayb Hossain</a></div>
+                </div>
+                <div class="download-btns">
+                    <button class="download-btn pdf-btn" onclick="generatePDF()">Download PDF</button>
+                    <button class="download-btn docx-btn" onclick="generateDOCX()">Download DOCX</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="credit-footer">
+            Powered by <a href="https://www.khubaybhossain.com">Khubayb Hossain</a>
+        </footer>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        function updatePreview() {
+            const fullName = document.getElementById('fullName').value || 'Your Name';
+            document.getElementById('previewHeader').innerText = `Resume of ${fullName}`;
+
+            // Personal Info
+            document.getElementById('previewEmail').innerText = 'Email: ' + (document.getElementById('email').value || 'email@example.com');
+            document.getElementById('previewPhone').innerText = 'Phone: ' + (document.getElementById('phone').value || '(123) 456-7890');
+            document.getElementById('previewAddress').innerText = 'Address: ' + (document.getElementById('address').value || 'City, Country');
+            document.getElementById('previewReligion').innerText = 'Religion: ' + (document.getElementById('religion').value || '-');
+            document.getElementById('previewParents').innerText = 'Parents: ' + 
+                (document.getElementById('fatherName').value || 'Father\'s Name') + ' & ' + 
+                (document.getElementById('motherName').value || 'Mother\'s Name');
+            document.getElementById('previewMarital').innerText = 'Marital Status: ' + 
+                (document.getElementById('maritalStatus').value || 'Single');
+
+            // Education
+            const educationForms = document.querySelectorAll('.education-form');
+            let educationHTML = '';
+            educationForms.forEach(edu => {
+                const inputs = edu.querySelectorAll('input');
+                educationHTML += `
+                    <div class="edu-item">
+                        <h3>${inputs[0].value || 'Degree'} (${inputs[2].value || 'Years'})</h3>
+                        <p>${inputs[1].value || 'University'}</p>
+                        ${inputs[3].value ? `<p>GPA/CGPA: ${inputs[3].value}</p>` : ''}
+                    </div>
+                `;
+            });
+            document.getElementById('previewEducation').innerHTML = educationHTML;
+
+            // Experience
+            const experienceForms = document.querySelectorAll('.experience-form');
+            let experienceHTML = '';
+            experienceForms.forEach(exp => {
+                const inputs = exp.querySelectorAll('input, textarea');
+                experienceHTML += `
+                    <div class="exp-item">
+                        <h3>${inputs[0].value || 'Job Title'} @ ${inputs[1].value || 'Company'}</h3>
+                        <p>${inputs[2].value || 'Job Description'}</p>
+                    </div>
+                `;
+            });
+            document.getElementById('previewExperience').innerHTML = experienceHTML;
+
+            // Skills
+            const skills = document.getElementById('skills').value || 'Skill 1, Skill 2';
+            document.getElementById('previewSkills').innerHTML = skills.split(',').map(skill => `
+                <span class="skill-tag">${skill.trim()}</span>
+            `).join('');
+        }
+
+        function addEducation() {
+            const educationForm = document.querySelector('.education-form');
+            const clone = educationForm.cloneNode(true);
+            clone.querySelectorAll('input').forEach(input => input.value = '');
+            educationForm.parentNode.insertBefore(clone, educationForm.nextSibling);
+            updatePreview();
+        }
+
+        function addExperience() {
+            const experienceForm = document.querySelector('.experience-form');
+            const clone = experienceForm.cloneNode(true);
+            clone.querySelectorAll('input, textarea').forEach(input => input.value = '');
+            experienceForm.parentNode.insertBefore(clone, experienceForm.nextSibling);
+            updatePreview();
+        }
+
+        async function generatePDF() {
+            const element = document.getElementById('resumePreview');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            await pdf.html(element, {
+                margin: [15, 15, 15, 15],
+                width: 190,
+                windowWidth: 794,
+                autoPaging: 'text',
+                callback: function(pdf) {
+                    pdf.save('Resume.pdf');
+                }
+            });
+        }
+
+        function generateDOCX() {
+            const content = document.getElementById('resumePreview').innerHTML;
+            const converted = htmlDocx.asBlob(content);
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(converted);
+            link.download = 'Resume.docx';
+            link.click();
+        }
+
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        updatePreview();
+    </script>
+</body>
+</html>
