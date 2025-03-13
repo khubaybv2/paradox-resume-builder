@@ -1,0 +1,242 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #27ae60;
+    --text-color: #333;
+    --light-gray: #f5f5f5;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--light-gray);
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+}
+
+.resume-builder-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.builder-header h1 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+.builder-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.input-section {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group h3 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--light-gray);
+    padding-bottom: 5px;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background: var(--light-gray);
+    color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+}
+
+.add-more {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: opacity 0.3s;
+    font-family: 'Roboto', sans-serif;
+}
+
+.add-more:hover {
+    opacity: 0.9;
+}
+
+.preview-section {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.resume-preview {
+    min-height: 800px;
+    padding: 30px;
+    background: #ffffff;
+    width: 21cm;
+    min-height: 29.7cm;
+    margin: 0 auto;
+    position: relative;
+}
+
+.download-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.download-btn {
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+}
+
+.pdf-btn {
+    background: var(--accent-color);
+}
+
+.docx-btn {
+    background: #2980b9;
+}
+
+.credit-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 15px;
+    font-size: 0.9em;
+    color: var(--text-color);
+}
+
+.credit-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.download-credit {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .builder-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .resume-preview {
+        width: 100%;
+        min-height: auto;
+    }
+
+    .input-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Preview Styles */
+.preview-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.preview-header h1 {
+    color: var(--primary-color);
+    margin: 5px 0;
+    font-size: 2em;
+    font-weight: 700;
+}
+
+.preview-header p {
+    margin: 5px 0;
+    font-size: 0.9em;
+    color: var(--text-color);
+}
+
+.personal-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.section-title {
+    color: var(--secondary-color);
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--light-gray);
+    padding-bottom: 5px;
+}
+
+.edu-item, .exp-item {
+    margin-bottom: 20px;
+}
+
+.edu-item h3, .exp-item h3 {
+    font-size: 1em;
+    font-weight: 500;
+    margin: 5px 0;
+    color: var(--primary-color);
+}
+
+.edu-item p, .exp-item p {
+    margin: 3px 0;
+    font-size: 0.9em;
+    color: var(--text-color);
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skill-tag {
+    background: var(--secondary-color);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 0.9em;
+}
